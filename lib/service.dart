@@ -11,16 +11,28 @@ class LoggingService {
   static LoggingService shared = LoggingService._privateConstructor();
 
   Logger logger;
-  void init(Map config, {LogOutput output}) {
+  void init(Map config, {List<LogOutput> logOutputs}) {
+    // Set log level, e.g. config['logLevel'] = 'debug'
+    Logger.level =
+        _enumFromString(Level.values, config['logLevel']) ?? Level.error;
+
     var outputs = List<LogOutput>();
     // alway log into console
     outputs.add(ConsoleOutput());
 
-    if (config['env'] == 'prod') {
+    // and log to cloud in production or staging
+    if (config['env'] == 'prod' || config['env'] == 'stag') {
       outputs.add(AzureOutput(config));
       outputs.add(FirebaseOutput(config));
     }
 
-    logger = Logger(printer: PrettyPrinter(), output: MultipleOutput(outputs));
+    logger = Logger(
+        printer: PrettyPrinter(),
+        output: MultipleOutput(logOutputs ?? outputs));
   }
+}
+
+T _enumFromString<T>(Iterable<T> values, String value) {
+  return values.firstWhere((type) => type.toString().split(".").last == value,
+      orElse: () => null);
 }
