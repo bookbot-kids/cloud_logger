@@ -1,7 +1,8 @@
 library logging_service;
 
 import 'package:logger/logger.dart';
-import 'package:logging_service/outputs/azure_output.dart';
+import 'package:logging_service/cloud_printer.dart';
+import 'package:logging_service/outputs/azure_monitor_output.dart';
 import 'package:logging_service/outputs/multiple_output.dart';
 
 import 'logging_service.dart';
@@ -27,21 +28,23 @@ class LoggingService {
   void init(Map config, {List<LogOutput> logOutputs}) {
     // Set log level, e.g. config['logLevel'] = 'debug'
     Logger.level =
-        _enumFromString(Level.values, config['logLevel']) ?? Level.error;
+        _enumFromString(Level.values, config['loggingLevel']) ?? Level.error;
 
     var outputs = List<LogOutput>();
 
-    if (config['env'] == null || config['env'] == 'dev') {
+    var isLocalEnv = config['env'] == null || config['env'] == 'dev';
+
+    if (isLocalEnv) {
       // log into console for local
       outputs.add(ConsoleOutput());
     } else if (config['env'] == 'prod' || config['env'] == 'stag') {
       // and log to cloud in production or staging
-      outputs.add(AzureOutput(config));
+      outputs.add(AzureMonitorOutput(config));
       outputs.add(FirebaseOutput(config));
     }
 
     logger = Logger(
-        printer: PrettyPrinter(),
+        printer: isLocalEnv ? PrettyPrinter() : CloudPrinter(),
         output: MultipleOutput(logOutputs ?? outputs));
   }
 }

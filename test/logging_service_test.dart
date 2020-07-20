@@ -4,7 +4,8 @@ import 'package:logging_service/logging_service.dart';
 void main() {
   test('logging', () {
     var logService = LoggingService.shared;
-    logService.init({'env': 'dev', 'logLevel': 'debug'});
+    Map<String, dynamic> configs = {'env': 'prod', 'loggingLevel': 'debug'};
+    logService.init(configs);
     var logger = logService.logger;
     logger.v("Verbose log");
 
