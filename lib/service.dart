@@ -17,8 +17,10 @@ class LoggingService {
         _enumFromString(Level.values, config['logLevel']) ?? Level.error;
 
     var outputs = List<LogOutput>();
-    // alway log into console
-    outputs.add(ConsoleOutput());
+    // log into console
+    if (config['env'] == null || config['env'] == 'dev') {
+      outputs.add(ConsoleOutput());
+    }
 
     // and log to cloud in production or staging
     if (config['env'] == 'prod' || config['env'] == 'stag') {
