@@ -1,5 +1,6 @@
 import 'package:logger/logger.dart';
 
+/// Contains all the logging outputs that can write into
 class MultipleOutput extends LogOutput {
   final List<LogOutput> outputs;
 
