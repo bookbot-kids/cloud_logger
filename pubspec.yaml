@@ -12,6 +12,13 @@ dependencies:
   flutter:
     sdk: flutter
   logger: 0.9.1
+  universal_io: ^1.0.1
+  stack_trace: 1.9.5
+  crypto: 2.1.5
+  sync_db:
+    git:
+      url: git://github.com/bookbot-kids/sync_db.git
+      ref: 2.0.0-rc5
 
 dev_dependencies:
   flutter_test:

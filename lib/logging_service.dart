@@ -1,3 +1,3 @@
-export 'service.dart';
-export 'outputs/azure_output.dart';
-export 'outputs/firebase_output.dart';
+export 'outputs/azure_monitor_output.dart';
+export 'outputs/multiple_output.dart';
+export 'cloud_printer.dart';
