@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:logger/logger.dart';
-import 'package:logging_service/system_info.dart';
+import 'package:logging_service/system_app_info.dart';
 import 'package:sync_db/sync_db.dart';
 import 'package:universal_io/io.dart';
 
@@ -51,16 +51,17 @@ class AzureMonitorOutput extends LogOutput {
   void output(OutputEvent event) {
     // parse all log lines into json map
     var logContent = event.lines.join('');
-    var map = SystemInfo.info;
-    if (event.level == Level.error) {
-      // logging for error
-      map[_errorPropertyKey] = logContent;
-    } else {
-      // other log
-      map[_propertyKey] = logContent;
-    }
+    SystemAppInfo.shared.information.then((map) {
+      if (event.level == Level.error) {
+        // logging for error
+        map[_errorPropertyKey] = logContent;
+      } else {
+        // other log
+        map[_propertyKey] = logContent;
+      }
 
-    sendLog(map).then((value) => null);
+      sendLog(map).then((value) => null);
+    });
   }
 
   /// Generate authentication signature base on date and secret keys

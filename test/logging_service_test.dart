@@ -3,9 +3,17 @@ import 'package:logger/logger.dart';
 import 'package:logging_service/logging_service.dart';
 
 void main() {
-  test('logging', () {
-    Map<String, dynamic> config = {'env': 'prod', 'loggingLevel': 'debug'};
-    var isLocalEnv = true;
+  test('logging', () async {
+    Map<String, dynamic> config = {
+      'env': 'prod',
+      'loggingLevel': 'debug',
+      'logLevel': 2,
+      'customerId': 'WorkbookId',
+      'logName': 'TestName',
+      'sharedKey': 'WorkbookPrimaryKey'
+    };
+
+    var isLocalEnv = false;
     var outputs = List<LogOutput>();
     if (isLocalEnv) {
       outputs.add(ConsoleOutput());
