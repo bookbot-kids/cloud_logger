@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:logger/logger.dart';
 
+/// The log pritter to print simple text into cloud
 class CloudPrinter extends LogPrinter {
   /// Matches a stacktrace line as generated on Android/iOS devices.
   /// For example:
