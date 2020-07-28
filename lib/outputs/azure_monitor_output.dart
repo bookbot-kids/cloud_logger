@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:logger/logger.dart';
+import 'package:logging_service/network/robust_http.dart';
+import 'package:logging_service/outputs/persist_log_output.dart';
 import 'package:logging_service/system_app_info.dart';
-import 'package:sync_db/sync_db.dart';
 import 'package:universal_io/io.dart';
+import 'package:uuid/uuid.dart';
 
 /// Azure monitor output log. It will write log content into a map like:
 ///
@@ -13,7 +15,7 @@ import 'package:universal_io/io.dart';
 /// or
 /// {"contentLog": "this is normal log"}
 /// ```
-class AzureMonitorOutput extends LogOutput {
+class AzureMonitorOutput extends PersistLogOutput {
   static const String _apiVersion = "2016-04-01";
   HTTP _http;
   String _sharedKey;
@@ -51,7 +53,7 @@ class AzureMonitorOutput extends LogOutput {
   void output(OutputEvent event) {
     // parse all log lines into json map
     var logContent = event.lines.join('');
-    SystemAppInfo.shared.information.then((map) {
+    SystemAppInfo.shared.information.then((map) async {
       if (event.level == Level.error) {
         // logging for error
         map[_errorPropertyKey] = logContent;
@@ -60,8 +62,40 @@ class AzureMonitorOutput extends LogOutput {
         map[_propertyKey] = logContent;
       }
 
-      sendLog(map).then((value) => null);
+      // save to database before sending to azure monitor
+      var id = Uuid().v4().toString();
+      map['id'] = id;
+      await save(map, 'AzureMonitor');
+      var result = await sendLogToAzure(map);
+      // then remove when send successfully
+      if (result) {
+        await remove(id);
+      }
     });
+  }
+
+  /// List all logs from database and send all into azure monitor
+  Future<void> sendAllLogs() async {
+    var list = await all('AzureMonitor');
+    var tasks = List<Future>();
+    list.forEach((item) {
+      tasks.add(sendLog(item));
+    });
+
+    await Future.wait(tasks);
+  }
+
+  /// Send a log into azure monitor
+  /// Must have `id` in the map
+  Future<void> sendLog(Map map) async {
+    if (map['id'] == null) {
+      throw ArgumentError('id is missing');
+    }
+
+    var result = await sendLogToAzure(map);
+    if (result) {
+      await remove(map['id']);
+    }
   }
 
   /// Generate authentication signature base on date and secret keys
@@ -76,34 +110,38 @@ class AzureMonitorOutput extends LogOutput {
   /// Send log to [azure monitor]
   ///
   /// [azure monitor]: https://docs.microsoft.com/en-us/azure/azure-monitor/platform/data-collector-api
-  /// `data`: the json map data
-  Future<void> sendLog(Map data) async {
-    var datestring = HttpDate.format(await NetworkTime.shared.now);
-    String jsonData = json.encode(data);
-    var jsonBytes = utf8.encode(jsonData);
-    String stringToHash = "POST\n" +
-        jsonBytes.length.toString() +
-        "\napplication/json\n" +
-        "x-ms-date:" +
-        datestring +
-        "\n/api/logs";
-    String hashedString = _buildSignature(stringToHash, _sharedKey);
-    String signature = "SharedKey " + _customerId + ":" + hashedString;
-
-    _http.headers = {
-      "x-ms-date": datestring,
-      "authorization": signature,
-      "content-type": "application/json",
-      "accept": "application/json",
-      "x-ms-version": _apiVersion,
-      "time-generated-field": "",
-      "log-type": _logName
-    };
-
+  /// `data`: the json map data. Notice that all the keys start with _ will not send to azure
+  Future<bool> sendLogToAzure(Map data) async {
     try {
+      // remove local fields
+      data.removeWhere((key, value) => key.startsWith('_'));
+      var datestring = HttpDate.format(DateTime.now());
+      String jsonData = json.encode(data);
+      var jsonBytes = utf8.encode(jsonData);
+      String stringToHash = "POST\n" +
+          jsonBytes.length.toString() +
+          "\napplication/json\n" +
+          "x-ms-date:" +
+          datestring +
+          "\n/api/logs";
+      String hashedString = _buildSignature(stringToHash, _sharedKey);
+      String signature = "SharedKey " + _customerId + ":" + hashedString;
+
+      _http.headers = {
+        "x-ms-date": datestring,
+        "authorization": signature,
+        "content-type": "application/json",
+        "accept": "application/json",
+        "x-ms-version": _apiVersion,
+        "time-generated-field": "",
+        "log-type": _logName
+      };
+
       await _http.post(_url, data: jsonData);
+      return true;
     } catch (e) {
       print(e);
+      return false;
     }
   }
 }
