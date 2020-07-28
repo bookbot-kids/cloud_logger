@@ -54,47 +54,55 @@ class AzureMonitorOutput extends PersistLogOutput {
     // parse all log lines into json map
     var logContent = event.lines.join('');
     SystemAppInfo.shared.information.then((map) async {
-      if (event.level == Level.error) {
-        // logging for error
-        map[_errorPropertyKey] = logContent;
-      } else {
-        // other log
-        map[_propertyKey] = logContent;
-      }
+      try {
+        if (event.level == Level.error) {
+          // logging for error
+          map[_errorPropertyKey] = logContent;
+        } else {
+          // other log
+          map[_propertyKey] = logContent;
+        }
 
-      // save to database before sending to azure monitor
-      var id = Uuid().v4().toString();
-      map['id'] = id;
-      await save(map, 'AzureMonitor');
-      var result = await sendLogToAzure(map);
-      // then remove when send successfully
-      if (result) {
-        await remove(id);
+        // save to database before sending to azure monitor
+        var id = Uuid().v4().toString();
+        map['id'] = id;
+        await save(map, 'AzureMonitor');
+        var result = await sendLogToAzure(map);
+        // then remove when send successfully
+        if (result) {
+          await remove(id);
+        }
+      } catch (e) {
+        print(e);
       }
     });
   }
 
   /// List all logs from database and send all into azure monitor
   Future<void> sendAllLogs() async {
-    var list = await all('AzureMonitor');
-    var tasks = List<Future>();
-    list.forEach((item) {
-      tasks.add(sendLog(item));
-    });
+    try {
+      var list = await all('AzureMonitor');
+      var tasks = List<Future>();
+      list.forEach((item) {
+        tasks.add(sendLog(item));
+      });
 
-    await Future.wait(tasks);
+      await Future.wait(tasks);
+    } catch (e) {
+      print(e);
+    }
   }
 
   /// Send a log into azure monitor
   /// Must have `id` in the map
   Future<void> sendLog(Map map) async {
-    if (map['id'] == null) {
-      throw ArgumentError('id is missing');
-    }
-
-    var result = await sendLogToAzure(map);
-    if (result) {
-      await remove(map['id']);
+    try {
+      var result = await sendLogToAzure(map);
+      if (result) {
+        await remove(map['id']);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 

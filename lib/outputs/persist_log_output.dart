@@ -19,9 +19,11 @@ abstract class PersistLogOutput extends LogOutput {
     await LogDatabase.shared.remove(id);
   }
 
+  /// List all the logs for special output type, sort by `createdAt asc`
   Future<List> all(String type) async {
     var finder = Finder();
     finder.filter = Filter.equals('_logOutputType', type);
+    finder.sortOrder = SortOrder('createdAt');
     return await LogDatabase.shared.query(finder: finder);
   }
 }

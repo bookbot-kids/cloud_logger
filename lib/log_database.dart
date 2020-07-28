@@ -19,7 +19,10 @@ class LogDatabase {
     var id = map['id'];
     if (!(id is String && id.isNotEmpty)) {
       id = Uuid().v4().toString();
-      map['createdAt'] = DateTime.now();
+    }
+
+    if (!map.containsKey('createdAt')) {
+      map['createdAt'] = DateTime.now().millisecondsSinceEpoch;
     }
 
     await store.record(id).put(_database, map);
