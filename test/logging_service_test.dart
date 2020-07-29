@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/logger.dart';
-import 'package:logging_service/logging_service.dart';
+import 'package:cloud_logger/cloud_logger.dart';
 
 void main() {
   test('logging', () async {
