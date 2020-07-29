@@ -49,7 +49,7 @@ class CloudPrinter extends LogPrinter {
 
     String timeStr;
     if (printTime) {
-      timeStr = getTime;
+      timeStr = time;
     }
 
     return _formatAndPrint(
@@ -100,7 +100,7 @@ class CloudPrinter extends LogPrinter {
         match.group(1).startsWith('dart-sdk/lib');
   }
 
-  String get getTime {
+  String get time {
     String _threeDigits(int n) {
       if (n >= 100) return '$n';
       if (n >= 10) return '0$n';

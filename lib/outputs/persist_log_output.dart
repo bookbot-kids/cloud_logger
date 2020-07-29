@@ -4,6 +4,9 @@ import 'package:sembast/sembast.dart';
 
 /// An abstract output that can persist data
 abstract class PersistLogOutput extends LogOutput {
+  /// The log database instance, share to all output subclasses
+  static LogDatabase _logDatabase = LogDatabase();
+
   /// Create or update log record by `map['id']`
   Future<void> save(Map map, String outputType) async {
     if (map['id'] == null) {
@@ -11,12 +14,12 @@ abstract class PersistLogOutput extends LogOutput {
     }
 
     map['_logOutputType'] = outputType;
-    await LogDatabase.shared.save(map);
+    await _logDatabase.save(map);
   }
 
   /// Delete log record
   Future<void> remove(String id) async {
-    await LogDatabase.shared.remove(id);
+    await _logDatabase.remove(id);
   }
 
   /// List all the logs for special output type, sort by `createdAt asc`
@@ -24,6 +27,6 @@ abstract class PersistLogOutput extends LogOutput {
     var finder = Finder();
     finder.filter = Filter.equals('_logOutputType', type);
     finder.sortOrder = SortOrder('createdAt');
-    return await LogDatabase.shared.query(finder: finder);
+    return await _logDatabase.query(finder: finder);
   }
 }

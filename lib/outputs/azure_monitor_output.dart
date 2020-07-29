@@ -16,7 +16,7 @@ import 'package:uuid/uuid.dart';
 /// {"contentLog": "this is normal log"}
 /// ```
 class AzureMonitorOutput extends PersistLogOutput {
-  static const String _apiVersion = "2016-04-01";
+  static const String _azureApiVersion = "2016-04-01";
   HTTP _http;
   String _sharedKey;
   String _customerId;
@@ -45,10 +45,13 @@ class AzureMonitorOutput extends PersistLogOutput {
     _propertyKey = config['propertyKey'] ?? 'contentLog';
     _logName = config['logName'];
     _url =
-        "https://$_customerId.ods.opinsights.azure.com/api/logs?api-version=$_apiVersion";
+        "https://$_customerId.ods.opinsights.azure.com/api/logs?api-version=$_azureApiVersion";
     _http = HTTP(null, config);
   }
 
+  /// An output method is called from [LogPrinter], which receive an [OutputEvent] when one of the log method is called, e.g `logger.v("Verbose log")`. More [Reference]
+  ///
+  /// [Reference]: https://github.com/leisim/logger/blob/master/lib/src/log_output.dart#L3
   @override
   void output(OutputEvent event) {
     // parse all log lines into json map
@@ -140,7 +143,7 @@ class AzureMonitorOutput extends PersistLogOutput {
         "authorization": signature,
         "content-type": "application/json",
         "accept": "application/json",
-        "x-ms-version": _apiVersion,
+        "x-ms-version": _azureApiVersion,
         "time-generated-field": "",
         "log-type": _logName
       };
