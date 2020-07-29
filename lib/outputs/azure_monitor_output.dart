@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:logger/logger.dart';
-import 'package:logging_service/network/robust_http.dart';
 import 'package:logging_service/outputs/persist_log_output.dart';
 import 'package:logging_service/system_app_info.dart';
+import 'package:robust_http/robust_http.dart';
 import 'package:universal_io/io.dart';
 import 'package:uuid/uuid.dart';
 
