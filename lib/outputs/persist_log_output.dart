@@ -54,16 +54,15 @@ abstract class PersistLogOutput extends LogOutput {
     return results;
   }
 
+  /// Sembast database factory, uses to init database from a path. It has difference factory for web or other platform
+  static DatabaseFactory get _databaseFactory {
+    return UniversalPlatform.isWeb ? databaseFactoryWeb : databaseFactoryIo;
+  }
+
   /// Get the sembast database instance, init if needed
   static Future<Database> get database async {
     if (_database == null) {
-      dynamic databaseFactory;
-      if (UniversalPlatform.isWeb) {
-        databaseFactory = databaseFactoryWeb;
-      }
-
-      databaseFactory = databaseFactoryIo;
-      _database = await databaseFactory.openDatabase('log.db');
+      _database = await _databaseFactory.openDatabase('log.db');
     }
 
     return _database;
