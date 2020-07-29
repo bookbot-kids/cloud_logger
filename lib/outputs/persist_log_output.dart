@@ -1,4 +1,6 @@
 import 'package:logger/logger.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:sembast_web/sembast_web.dart';
@@ -59,10 +61,23 @@ abstract class PersistLogOutput extends LogOutput {
     return UniversalPlatform.isWeb ? databaseFactoryWeb : databaseFactoryIo;
   }
 
+  /// Get database path. On mobile it's in document folder, on web it's just in browser storage
+  static Future<String> get _databasePath async {
+    final dbName = 'log.db';
+    if (UniversalPlatform.isWeb) {
+      return dbName;
+    }
+
+    // return db path from application  document folder
+    final dir = await getApplicationDocumentsDirectory();
+    await dir.create(recursive: true);
+    return join(dir.path, dbName);
+  }
+
   /// Get the sembast database instance, init if needed
   static Future<Database> get database async {
     if (_database == null) {
-      _database = await _databaseFactory.openDatabase('log.db');
+      _database = await _databaseFactory.openDatabase(await _databasePath);
     }
 
     return _database;

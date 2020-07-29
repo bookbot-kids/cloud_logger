@@ -46,7 +46,12 @@ class AzureMonitorOutput extends PersistLogOutput {
     _logName = config['logName'];
     _url =
         "https://$_customerId.ods.opinsights.azure.com/api/logs?api-version=$_azureApiVersion";
-    _http = HTTP(null, config);
+
+    // Dont retry or log this api
+    var customConfigs = Map<String, dynamic>.from(config);
+    customConfigs['httpRetries'] = 1;
+    customConfigs['logLevel'] = 'none';
+    _http = HTTP(null, customConfigs);
   }
 
   /// An output method is called from [LogPrinter], which receive an [OutputEvent] when one of the log method is called, e.g `logger.v("Verbose log")`. More [Reference]
