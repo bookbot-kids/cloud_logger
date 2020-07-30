@@ -50,12 +50,12 @@ class AzureMonitorOutput extends PersistLogOutput {
   /// [Reference]: https://github.com/leisim/logger/blob/master/lib/src/log_output.dart#L3
   @override
   void output(OutputEvent event) {
-    // only send error and wtf log into azure
-    if (event.level != Level.error || event.level != Level.wtf) {
+    if (event.lines == null || event.lines.isEmpty) {
       return;
     }
 
-    if (event.lines == null || event.lines.isEmpty) {
+    // only send error and wtf log into azure
+    if (event.level != Level.error && event.level != Level.wtf) {
       return;
     }
 
