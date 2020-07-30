@@ -27,7 +27,7 @@ class CloudPrinter extends LogPrinter {
     this.methodCount = 2,
     this.errorMethodCount = 8,
     this.lineLength = 120,
-    this.printTime = true,
+    this.printTime = false,
   }) {
     _startTime ??= DateTime.now();
   }
@@ -156,8 +156,6 @@ class CloudPrinter extends LogPrinter {
     if (time != null) {
       buffer.add('$time');
     }
-
-    buffer.add('\n');
 
     for (var line in message.split('\n')) {
       buffer.add(line);

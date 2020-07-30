@@ -22,8 +22,6 @@ class AzureMonitorOutput extends PersistLogOutput {
   String _customerId;
   String _logName;
   String _url;
-  String _errorPropertyKey;
-  String _propertyKey;
 
   /// Initialize the output with [azure monitor workbook] keys:
   ///
@@ -33,16 +31,9 @@ class AzureMonitorOutput extends PersistLogOutput {
   /// `sharedKey`: The primary key in workbook advance settings
   ///
   /// `logName`: The name of custom log in log analytic
-  ///
-  /// `errorPropertyKey`: The error log property key
-  ///
-  /// `propertyKey`: other log property key
   AzureMonitorOutput(Map config) {
     _customerId = config['customerId'];
     _sharedKey = config['sharedKey'];
-    _logName = config['logName'];
-    _errorPropertyKey = config['errorPropertyKey'] ?? 'errorLog';
-    _propertyKey = config['propertyKey'] ?? 'contentLog';
     _logName = config['logName'];
     _url =
         "https://$_customerId.ods.opinsights.azure.com/api/logs?api-version=$_azureApiVersion";
@@ -59,18 +50,21 @@ class AzureMonitorOutput extends PersistLogOutput {
   /// [Reference]: https://github.com/leisim/logger/blob/master/lib/src/log_output.dart#L3
   @override
   void output(OutputEvent event) {
-    // parse all log lines into json map
-    var logContent = event.lines.join('');
+    // only send error and wtf log into azure
+    if (event.level != Level.error || event.level != Level.wtf) {
+      return;
+    }
+
+    if (event.lines == null || event.lines.isEmpty) {
+      return;
+    }
+
     SystemAppInfo.shared.information.then((map) async {
       try {
-        if (event.level == Level.error) {
-          // logging for error
-          map[_errorPropertyKey] = logContent;
-        } else {
-          // other log
-          map[_propertyKey] = logContent;
-        }
-
+        // parse all log lines into string
+        map['logContent'] = event.lines.join(' ');
+        map['logName'] = event.lines.first;
+        map['logType'] = event.level == Level.error ? 'error' : 'critical';
         // save to database before sending to azure monitor
         var id = Uuid().v4().toString();
         map['id'] = id;
