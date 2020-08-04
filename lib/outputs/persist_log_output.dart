@@ -18,9 +18,10 @@ abstract class PersistLogOutput extends LogOutput {
     map['_logOutputType'] = outputType;
     var store = StoreRef.main();
     var id = map['id'];
-    if (!(id is String && id.isNotEmpty)) {
+    if (id == null || !(id is String && id.isNotEmpty)) {
       id = Uuid().v4().toString();
     }
+
     if (!map.containsKey('createdAt')) {
       map['createdAt'] = DateTime.now().millisecondsSinceEpoch;
     }
