@@ -66,13 +66,11 @@ class AzureMonitorOutput extends PersistLogOutput {
         map['logName'] = event.lines.first;
         map['logType'] = event.level == Level.error ? 'error' : 'critical';
         // save to database before sending to azure monitor
-        var id = Uuid().v4().toString();
-        map['id'] = id;
-        await save(map, 'AzureMonitor');
+        var newRecord = await save(map, 'AzureMonitor');
         var result = await sendLogToAzure(map);
         // then remove when send successfully
         if (result) {
-          await remove(id);
+          await remove(newRecord['id']);
         }
       } catch (e) {
         print(e);

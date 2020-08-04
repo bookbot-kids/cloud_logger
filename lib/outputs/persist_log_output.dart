@@ -14,11 +14,7 @@ abstract class PersistLogOutput extends LogOutput {
   static Database _database;
 
   /// Create or update log record by `map['id']`
-  Future<void> save(Map map, String outputType) async {
-    if (map['id'] == null) {
-      throw ArgumentError('id is missing');
-    }
-
+  Future<dynamic> save(Map map, String outputType) async {
     map['_logOutputType'] = outputType;
     var store = StoreRef.main();
     var id = map['id'];
@@ -29,7 +25,7 @@ abstract class PersistLogOutput extends LogOutput {
       map['createdAt'] = DateTime.now().millisecondsSinceEpoch;
     }
 
-    await store.record(id).put(await database, map);
+    return await store.record(id).put(await database, map);
   }
 
   /// Delete log record
