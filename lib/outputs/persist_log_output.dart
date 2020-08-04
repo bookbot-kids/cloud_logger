@@ -20,13 +20,15 @@ abstract class PersistLogOutput extends LogOutput {
     var id = map['id'];
     if (id == null || !(id is String && id.isNotEmpty)) {
       id = Uuid().v4().toString();
+      map['id'] = id;
     }
 
     if (!map.containsKey('createdAt')) {
       map['createdAt'] = DateTime.now().millisecondsSinceEpoch;
     }
 
-    return await store.record(id).put(await database, map);
+    await store.record(id).put(await database, map);
+    return map;
   }
 
   /// Delete log record
