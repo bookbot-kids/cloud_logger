@@ -3,6 +3,7 @@ description: A new Flutter package project.
 version: 0.0.1
 author:
 homepage:
+publish_to: none
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -11,26 +12,26 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  logger: ^0.9.1
+  logger: ^0.9.4
   universal_io: ^1.0.1
-  stack_trace: ^1.9.5
+  stack_trace: ^1.9.6
   crypto: ^2.1.5
-  device_info: ^0.4.2+4
+  device_info: ^1.0.0
   universal_platform: ^0.1.3
   universal_html: ^1.2.3
-  package_info: ^0.4.1
+  package_info: ^0.4.3+2
   sembast_web: ^1.2.0
-  sembast: ^2.4.7+4
-  dio: ^3.0.9
-  connectivity: ^0.4.9
+  sembast: ^2.4.8+1
+  dio: ^3.0.10
+  connectivity: ^2.0.2
   uuid: ^2.2.0
-  path_provider: ^1.6.11
+  path_provider: ^1.6.24
   path: ^1.7.0
 
   robust_http:
     git:
       url: git://github.com/bookbot-kids/robust-http.git
-      ref: 0.0.6
+      ref: 0.0.7
 
 dev_dependencies:
   flutter_test:
