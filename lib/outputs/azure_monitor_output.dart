@@ -18,24 +18,24 @@ class AzureMonitorOutput extends PersistLogOutput {
   static const String _azureApiVersion = "2016-04-01";
   HTTP _http;
   String _sharedKey;
-  String _customerId;
+  String _workBookId;
   String _logName;
   String _url;
 
   /// Initialize the output with [azure monitor workbook] keys:
   ///
   /// [azure monitor workbook]: https://docs.microsoft.com/en-us/azure/azure-monitor/platform/workbooks-overview
-  /// `customerId`: The analytic workbook id
+  /// `azureMonitorWorkbookId`: The analytic workbook id
   ///
-  /// `sharedKey`: The primary key in workbook advance settings
+  /// `azureMonitorSharedKey`: The primary key in workbook advance settings
   ///
-  /// `logName`: The name of custom log in log analytic
+  /// `azureMonitorLogName`: The name of custom log in log analytic
   AzureMonitorOutput(Map config) {
-    _customerId = config['customerId'];
-    _sharedKey = config['sharedKey'];
-    _logName = config['logName'];
+    _workBookId = config['azureMonitorWorkbookId'];
+    _sharedKey = config['azureMonitorSharedKey'];
+    _logName = config['azureMonitorLogName'];
     _url =
-        "https://$_customerId.ods.opinsights.azure.com/api/logs?api-version=$_azureApiVersion";
+        "https://$_workBookId.ods.opinsights.azure.com/api/logs?api-version=$_azureApiVersion";
 
     // Dont retry or log this api
     var customConfigs = Map<String, dynamic>.from(config);
@@ -81,7 +81,7 @@ class AzureMonitorOutput extends PersistLogOutput {
   Future<void> sendAllLogs() async {
     try {
       var list = await all('AzureMonitor');
-      var tasks = List<Future>();
+      var tasks = <Future>[];
       list.forEach((item) {
         tasks.add(sendLog(item));
       });
@@ -132,7 +132,7 @@ class AzureMonitorOutput extends PersistLogOutput {
           datestring +
           "\n/api/logs";
       String hashedString = _buildSignature(stringToHash, _sharedKey);
-      String signature = "SharedKey " + _customerId + ":" + hashedString;
+      String signature = "SharedKey " + _workBookId + ":" + hashedString;
 
       _http.headers = {
         "x-ms-date": datestring,

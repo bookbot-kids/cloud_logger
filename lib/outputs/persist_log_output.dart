@@ -45,7 +45,7 @@ abstract class PersistLogOutput extends LogOutput {
     finder.filter = Filter.equals('_logOutputType', type);
     finder.sortOrder = SortOrder('createdAt');
     final store = StoreRef.main();
-    var results = List();
+    var results = [];
     var records = await store.find(await database, finder: finder);
     for (var record in records) {
       var value = SembastUtils.cloneValue(record.value);
