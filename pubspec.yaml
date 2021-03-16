@@ -13,25 +13,24 @@ dependencies:
   flutter:
     sdk: flutter
   logger: ^0.9.4
-  universal_io: ^1.0.1
-  stack_trace: ^1.9.6
-  crypto: ^2.1.5
-  device_info: ^1.0.0
+  universal_io: ^2.0.1
+  stack_trace: ^1.10.0
+  crypto: ^3.0.0
+  device_info: ^2.0.0
   universal_platform: ^0.1.3
-  universal_html: ^1.2.3
-  package_info: ^0.4.3+2
-  sembast_web: ^1.2.0
-  sembast: ^2.4.8+1
+  universal_html: ^2.0.4
+  package_info: ^2.0.0
+  sembast_web: ^2.0.0+2
+  sembast: ^3.0.0+4
   dio: ^3.0.10
-  connectivity: ^2.0.2
-  uuid: ^2.2.0
-  path_provider: ^1.6.24
-  path: ^1.7.0
+  connectivity: ^3.0.2
+  uuid: ^3.0.1
+  path_provider: ^2.0.1
+  path: ^1.8.0
 
   robust_http:
     git:
       url: git://github.com/bookbot-kids/robust-http.git
-      ref: 0.0.7
 
 dev_dependencies:
   flutter_test:
