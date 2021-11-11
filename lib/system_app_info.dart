@@ -1,4 +1,5 @@
 import 'package:device_info/device_info.dart';
+import 'package:singleton/singleton.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:package_info/package_info.dart';
@@ -6,8 +7,10 @@ import 'package:package_info/package_info.dart';
 /// This class uses to collection all system device
 /// and app information into the log
 class SystemAppInfo {
+  factory SystemAppInfo() =>
+      Singleton.lazy(() => SystemAppInfo._privateConstructor()).instance;
   SystemAppInfo._privateConstructor();
-  static SystemAppInfo shared = SystemAppInfo._privateConstructor();
+  static SystemAppInfo shared = SystemAppInfo();
 
   Map<String, dynamic> _information;
 

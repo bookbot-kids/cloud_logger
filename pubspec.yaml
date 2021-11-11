@@ -1,7 +1,6 @@
 name: cloud_logger
 description: A new Flutter package project.
 version: 0.0.1
-author:
 homepage:
 publish_to: none
 
@@ -25,6 +24,7 @@ dependencies:
   uuid: ^3.0.4
   path_provider: ^2.0.2
   path: ^1.8.0
+  singleton: ^0.0.2
 
   robust_http:
     git:
