@@ -1,7 +1,6 @@
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:singleton/singleton.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:universal_html/html.dart' as html;
 import 'package:package_info/package_info.dart';
 
 /// This class uses to collection all system device
@@ -42,21 +41,79 @@ class SystemAppInfo {
 
   /// Collect all system info for each platform and write into a map
   Future<Map<String, dynamic>> collectSystemInfo() async {
+    final plugin = DeviceInfoPlugin();
     if (UniversalPlatform.isAndroid) {
-      var plugin = DeviceInfoPlugin();
       return _collectAndroidInfo(await plugin.androidInfo);
     } else if (UniversalPlatform.isIOS) {
-      var plugin = DeviceInfoPlugin();
       return _collectIosInfo(await plugin.iosInfo);
     } else if (UniversalPlatform.isWeb) {
-      return <String, dynamic>{'userAgent': html.window.navigator.userAgent};
+      final webBrowserInfo = await plugin.webBrowserInfo;
+      return _collectWebInfo(webBrowserInfo);
     } else if (UniversalPlatform.isWindows) {
-      // TODO check later
+      final windowsInfo = await plugin.windowsInfo;
+      return _collectWindowsInfo(windowsInfo);
     } else if (UniversalPlatform.isMacOS) {
-      // TODO check later
+      final macosInfo = await plugin.macOsInfo;
+      return _collectMacOSInfo(macosInfo);
+    } else if (UniversalPlatform.isLinux) {
+      final linuxInfo = await plugin.linuxInfo;
+      return _collectLinuxInfo(linuxInfo);
     }
 
     return Map<String, dynamic>();
+  }
+
+  Map<String, dynamic> _collectWebInfo(WebBrowserInfo webBrowserInfo) {
+    return <String, dynamic>{
+      'deviceMemory': webBrowserInfo.deviceMemory,
+      'hardwareConcurrency': webBrowserInfo.hardwareConcurrency,
+      'product': webBrowserInfo.product,
+      'browserName': webBrowserInfo.browserName.name,
+      'userAgent': webBrowserInfo.userAgent,
+      'language': webBrowserInfo.language,
+      'maxTouchPoints': webBrowserInfo.maxTouchPoints,
+      'appCodeName': webBrowserInfo.appCodeName,
+      'appName': webBrowserInfo.appName,
+    };
+  }
+
+  Map<String, dynamic> _collectMacOSInfo(MacOsDeviceInfo macosInfo) {
+    return <String, dynamic>{
+      'computerName': macosInfo.computerName,
+      'model': macosInfo.model,
+      'activeCPUs': macosInfo.activeCPUs,
+      'arch': macosInfo.arch,
+      'cpuFrequency': macosInfo.cpuFrequency,
+      'hostName': macosInfo.hostName,
+      'kernelVersion': macosInfo.kernelVersion,
+      'memorySize': macosInfo.memorySize,
+      'osRelease': macosInfo.osRelease,
+      'systemGUID': macosInfo.systemGUID,
+    };
+  }
+
+  Map<String, dynamic> _collectWindowsInfo(WindowsDeviceInfo windowsInfo) {
+    return <String, dynamic>{
+      'computerName': windowsInfo.computerName,
+      'numberOfCores': windowsInfo.numberOfCores,
+      'systemMemoryInMegabytes': windowsInfo.systemMemoryInMegabytes,
+    };
+  }
+
+  Map<String, dynamic> _collectLinuxInfo(LinuxDeviceInfo linuxInfo) {
+    return <String, dynamic>{
+      'deviceId': linuxInfo.id,
+      'buildId': linuxInfo.buildId,
+      'idLike': linuxInfo.idLike,
+      'machineId': linuxInfo.machineId,
+      'name': linuxInfo.name,
+      'prettyName': linuxInfo.prettyName,
+      'variant': linuxInfo.variant,
+      'variantId': linuxInfo.variantId,
+      'version': linuxInfo.version,
+      'versionCodename': linuxInfo.versionCodename,
+      'versionId': linuxInfo.versionId,
+    };
   }
 
   Map<String, dynamic> _collectAndroidInfo(AndroidDeviceInfo build) {
@@ -76,7 +133,7 @@ class SystemAppInfo {
       'fingerprint': build.fingerprint,
       'hardware': build.hardware,
       'host': build.host,
-      'id': build.id,
+      'build.id': build.id,
       'manufacturer': build.manufacturer,
       'model': build.model,
       'product': build.product,
