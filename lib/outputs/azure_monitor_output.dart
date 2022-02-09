@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_logger/custom_log_info.dart';
 import 'package:crypto/crypto.dart';
 import 'package:logger/logger.dart';
 import 'package:cloud_logger/outputs/persist_log_output.dart';
@@ -60,13 +61,18 @@ class AzureMonitorOutput extends PersistLogOutput {
 
     SystemAppInfo.shared.information.then((map) async {
       try {
+        final clonedMap = Map<String, dynamic>.from(map);
+        // add custom info
+        clonedMap.addAll(CustomLogInfo.shared.information);
+
         // parse all log lines into string
-        map['logContent'] = event.lines.join(' ');
-        map['logName'] = event.lines.first;
-        map['logType'] = event.level == Level.error ? 'error' : 'critical';
+        clonedMap['logContent'] = event.lines.join(' ');
+        clonedMap['logName'] = event.lines.first;
+        clonedMap['logType'] =
+            event.level == Level.error ? 'error' : 'critical';
         // save to database before sending to azure monitor
-        var newRecord = await save(map, 'AzureMonitor');
-        var result = await sendLogToAzure(map);
+        var newRecord = await save(clonedMap, 'AzureMonitor');
+        var result = await sendLogToAzure(clonedMap);
         // then remove when send successfully
         if (result) {
           await remove(newRecord['id']);
