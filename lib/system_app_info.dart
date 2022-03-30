@@ -1,7 +1,7 @@
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:singleton/singleton.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:package_info/package_info.dart';
 
 /// This class uses to collection all system device
 /// and app information into the log

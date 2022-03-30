@@ -15,24 +15,25 @@ dependencies:
   universal_io: ^2.0.4
   stack_trace: ^1.10.0
   crypto: ^3.0.1
-  device_info_plus: ^3.1.1
+  device_info_plus: ^3.2.2
   universal_platform: ^1.0.0+1
-  package_info: ^2.0.2
+  package_info_plus: ^1.4.0
   sembast_web: ^2.0.1+1
-  sembast: ^3.1.1
-  uuid: ^3.0.5
-  path_provider: ^2.0.7
-  path: ^1.8.0
+  sembast: ^3.2.0
+  uuid: ^3.0.6
+  path_provider: ^2.0.9
+  path: ^1.8.1
   singleton: ^0.0.2
 
   robust_http:
     git:
-      url: git://github.com/bookbot-kids/robust-http.git
+      url: https://github.com/bookbot-kids/robust-http.git
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+dependency_overrides:
+  path: ^1.8.1
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
