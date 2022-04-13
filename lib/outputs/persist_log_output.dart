@@ -11,7 +11,7 @@ import 'package:sembast/utils/value_utils.dart' as SembastUtils;
 /// An abstract output that can persist data
 abstract class PersistLogOutput extends LogOutput {
   /// Sembast database instance
-  static Database _database;
+  static Database? _database;
 
   /// Create or update log record by `map['id']`
   Future<dynamic> save(Map map, String outputType) async {
@@ -79,6 +79,6 @@ abstract class PersistLogOutput extends LogOutput {
       _database = await _databaseFactory.openDatabase(await _databasePath);
     }
 
-    return _database;
+    return _database!;
   }
 }

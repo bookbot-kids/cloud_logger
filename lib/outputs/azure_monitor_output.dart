@@ -17,11 +17,11 @@ import 'package:universal_io/io.dart';
 /// ```
 class AzureMonitorOutput extends PersistLogOutput {
   static const String _azureApiVersion = "2016-04-01";
-  HTTP _http;
-  String _sharedKey;
-  String _workBookId;
-  String _logName;
-  String _url;
+  late HTTP _http;
+  late String _sharedKey;
+  late String _workBookId;
+  late String _logName;
+  late String _url;
 
   /// Initialize the output with [azure monitor workbook] keys:
   ///
@@ -50,7 +50,7 @@ class AzureMonitorOutput extends PersistLogOutput {
   /// [Reference]: https://github.com/leisim/logger/blob/master/lib/src/log_output.dart#L3
   @override
   void output(OutputEvent event) {
-    if (event.lines == null || event.lines.isEmpty) {
+    if (event.lines.isEmpty) {
       return;
     }
 

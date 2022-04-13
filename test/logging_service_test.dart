@@ -14,7 +14,7 @@ void main() {
     };
 
     var isLocalEnv = false;
-    var outputs = List<LogOutput>();
+    var outputs = <LogOutput>[];
     if (isLocalEnv) {
       outputs.add(ConsoleOutput());
     } else {

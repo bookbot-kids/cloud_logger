@@ -11,17 +11,17 @@ class SystemAppInfo {
   SystemAppInfo._privateConstructor();
   static SystemAppInfo shared = SystemAppInfo();
 
-  Map<String, dynamic> _information;
+  Map<String, dynamic>? _information;
 
   /// Return the system information properties
   Future<Map<String, dynamic>> get information async {
     if (_information == null) {
       _information = Map();
-      _information.addAll(await collectSystemInfo());
-      _information.addAll(await collectAppInfo());
+      _information?.addAll(await collectSystemInfo());
+      _information?.addAll(await collectAppInfo());
     }
 
-    return _information;
+    return _information ?? {};
   }
 
   /// Collect app build version info. Only work for android & ios
