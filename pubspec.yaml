@@ -15,15 +15,15 @@ dependencies:
   universal_io: ^2.0.4
   stack_trace: ^1.10.0
   crypto: ^3.0.1
-  device_info_plus: ^3.2.2
+  device_info_plus: ^3.2.3
   universal_platform: ^1.0.0+1
-  package_info_plus: ^1.4.0
+  package_info_plus: ^1.4.2
   sembast_web: ^2.0.1+1
   sembast: ^3.2.0
   uuid: ^3.0.6
   path_provider: ^2.0.9
   path: ^1.8.1
-  singleton: ^0.0.2
+  singleton: ^0.0.3-nullsafety
 
   robust_http:
     git:

@@ -7,7 +7,7 @@ import 'package:universal_platform/universal_platform.dart';
 /// and app information into the log
 class SystemAppInfo {
   factory SystemAppInfo() =>
-      Singleton.lazy(() => SystemAppInfo._privateConstructor()).instance;
+      Singleton.lazy(() => SystemAppInfo._privateConstructor());
   SystemAppInfo._privateConstructor();
   static SystemAppInfo shared = SystemAppInfo();
 
