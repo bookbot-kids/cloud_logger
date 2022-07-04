@@ -14,15 +14,15 @@ dependencies:
   logger: ^1.1.0
   universal_io: ^2.0.4
   stack_trace: ^1.10.0
-  crypto: ^3.0.1
-  device_info_plus: ^3.2.3
+  crypto: ^3.0.2
+  device_info_plus: ^4.0.0
   universal_platform: ^1.0.0+1
   package_info_plus: ^1.4.2
   sembast_web: ^2.0.1+1
-  sembast: ^3.2.0
+  sembast: ^3.2.0+1
   uuid: ^3.0.6
-  path_provider: ^2.0.9
-  path: ^1.8.1
+  path_provider: ^2.0.11
+  path: ^1.8.2
   singleton: ^0.0.3-nullsafety
 
   robust_http:
@@ -33,7 +33,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 dependency_overrides:
-  path: ^1.8.1
+  path: ^1.8.2
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
