@@ -1,3 +1,4 @@
+import 'package:android_id/android_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:singleton/singleton.dart';
@@ -42,8 +43,10 @@ class SystemAppInfo {
   /// Collect all system info for each platform and write into a map
   Future<Map<String, dynamic>> collectSystemInfo() async {
     final plugin = DeviceInfoPlugin();
+    const _androidIdPlugin = AndroidId();
     if (UniversalPlatform.isAndroid) {
-      return _collectAndroidInfo(await plugin.androidInfo);
+      final androidId = await _androidIdPlugin.getId();
+      return _collectAndroidInfo(await plugin.androidInfo, androidId);
     } else if (UniversalPlatform.isIOS) {
       return _collectIosInfo(await plugin.iosInfo);
     } else if (UniversalPlatform.isWeb) {
@@ -116,7 +119,8 @@ class SystemAppInfo {
     };
   }
 
-  Map<String, dynamic> _collectAndroidInfo(AndroidDeviceInfo build) {
+  Map<String, dynamic> _collectAndroidInfo(AndroidDeviceInfo build,
+      String? androidId) {
     return <String, dynamic>{
       'version.securityPatch': build.version.securityPatch,
       'version.sdkInt': build.version.sdkInt,
@@ -143,7 +147,7 @@ class SystemAppInfo {
       'tags': build.tags,
       'type': build.type,
       'isPhysicalDevice': build.isPhysicalDevice,
-      'androidId': build.androidId,
+      'androidId': androidId,
       'systemFeatures': build.systemFeatures,
     };
   }
