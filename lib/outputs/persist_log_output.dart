@@ -49,9 +49,10 @@ abstract class PersistLogOutput extends LogOutput {
     var records = await store.find(await database, finder: finder);
     for (var record in records) {
       final value = record.value;
-      if (value != null) {
-        var clone = SembastUtils.cloneValue(value);
-        results.add(clone);
+      if (value is Map) {
+        results.add(SembastUtils.cloneMap(value));
+      } else if (value != null) {
+        results.add(SembastUtils.cloneValue(value));
       }
     }
 
