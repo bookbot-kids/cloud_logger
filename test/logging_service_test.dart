@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/logger.dart';
 import 'package:cloud_logger/cloud_logger.dart';
@@ -13,7 +14,7 @@ void main() {
       'sharedKey': 'WorkbookPrimaryKey'
     };
 
-    var isLocalEnv = false;
+    var isLocalEnv = kDebugMode;
     var outputs = <LogOutput>[];
     if (isLocalEnv) {
       outputs.add(ConsoleOutput());
