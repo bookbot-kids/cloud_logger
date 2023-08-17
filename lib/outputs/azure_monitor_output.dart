@@ -55,7 +55,7 @@ class AzureMonitorOutput extends PersistLogOutput {
     }
 
     // only send error and wtf log into azure
-    if (event.level != Level.error && event.level != Level.wtf) {
+    if (event.level != Level.error && event.level != Level.fatal) {
       return;
     }
 

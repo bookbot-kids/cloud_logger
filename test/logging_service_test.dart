@@ -26,12 +26,12 @@ void main() {
         printer: isLocalEnv ? PrettyPrinter() : CloudPrinter(),
         output: MultipleOutput(outputs));
 
-    logger.v("Verbose log");
+    logger.t("Verbose log");
     logger.d("Debug log");
     logger.i("Info log");
     logger.w("Warning log");
     logger.e("Error log");
-    logger.wtf("What a terrible failure log");
+    logger.f("What a terrible failure log");
     assert(true);
   });
 }
