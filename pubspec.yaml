@@ -11,20 +11,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  logger: ^2.3.0
+  logger: ^2.4.0
   universal_io: ^2.2.2
-  stack_trace: ^1.11.1
-  crypto: ^3.0.3
-  device_info_plus: ^10.1.0
-  universal_platform: ^1.0.0+1
-  package_info_plus: ^8.0.0
-  sembast_web: ^2.3.0
-  sembast: ^3.7.1
-  uuid: ^4.4.0
-  path_provider: ^2.1.3
+  stack_trace: ^1.12.0
+  crypto: ^3.0.6
+  device_info_plus: ^11.0.0
+  universal_platform: ^1.1.0
+  package_info_plus: ^8.0.3
+  sembast_web: ^2.4.0+4
+  sembast: ^3.7.5
+  uuid: ^4.5.1
+  path_provider: ^2.1.4
   path: ^1.9.0
   singleton: ^0.0.3-nullsafety
-  android_id: ^0.3.6
+  android_id: ^0.4.0
 
   robust_http:
     git:
@@ -33,6 +33,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+dependency_overrides:
+  stack_trace: ^1.12.0    
 
 # The following section is specific to Flutter.
 flutter:
