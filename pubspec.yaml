@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   logger: ^2.5.0
   universal_io: ^2.2.2
-  stack_trace: ^1.12.1
+  stack_trace: ^1.12.0
   crypto: ^3.0.6
   device_info_plus: ^11.2.0
   universal_platform: ^1.1.0
@@ -32,8 +32,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-dependency_overrides:
-  stack_trace: ^1.12.1
 
 # The following section is specific to Flutter.
 flutter:
